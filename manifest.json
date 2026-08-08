@@ -1,0 +1,13 @@
+{
+  "name":"Carl — Offline Assistant",
+  "short_name":"Carl",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#ffffff",
+  "theme_color":"#111827",
+  "description":"Carl, a friendly offline study and creation assistant.",
+  "icons":[
+    {"src":"icon-180.png","sizes":"180x180","type":"image/png","purpose":"any maskable"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

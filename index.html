@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Carl">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Carl</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f4f6;color:#111827}
+body{padding-top:env(safe-area-inset-top)}.app{max-width:760px;margin:auto;min-height:100vh;background:#fff;display:flex;flex-direction:column}
+header{background:#111827;color:#fff;padding:16px 18px 14px;position:sticky;top:0;z-index:5}
+h1{margin:0;font-size:24px}header p{margin:3px 0 0;opacity:.75;font-size:13px}
+#chat{flex:1;padding:16px 13px 150px;overflow-y:auto}.msg{display:flex;margin:9px 0}.bubble{max-width:87%;padding:12px 14px;border-radius:18px;white-space:pre-wrap;line-height:1.45;overflow-wrap:anywhere}
+.carl{justify-content:flex-start}.carl .bubble{background:#eef2ff;border-bottom-left-radius:5px}.you{justify-content:flex-end}.you .bubble{background:#111827;color:#fff;border-bottom-right-radius:5px}
+.tools{position:fixed;left:0;right:0;bottom:64px;background:rgba(255,255,255,.96);border-top:1px solid #e5e7eb;padding:7px 10px;overflow-x:auto;white-space:nowrap}
+.tools button,.send{border:0;border-radius:999px;padding:9px 12px;background:#e5e7eb;font-size:14px;margin-right:6px}
+.composer{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid #ddd;padding:8px 10px calc(8px + env(safe-area-inset-bottom));z-index:6}
+.inner{max-width:760px;margin:auto;display:flex;gap:7px}input{min-width:0;flex:1;border:1px solid #d1d5db;border-radius:22px;padding:11px 14px;font-size:16px;outline:0}.send{margin:0;background:#111827;color:#fff;padding:0 16px}
+.small{text-align:center;font-size:11px;opacity:.55;padding:4px}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>🤖 Carl</h1><p>Offline study & creation assistant</p></header>
+<main id="chat"></main>
+<div class="tools">
+<button onclick="quick('Help me revise a topic')">📚 Revise</button>
+<button onclick="quick('Quiz me')">🧠 Quiz</button>
+<button onclick="quick('Give me a project idea')">💡 Idea</button>
+<button onclick="quick('Help me make something')">🛠️ Make</button>
+<button onclick="clearChat()">🗑️ Clear</button>
+</div>
+<div class="small">Carl v2 • Offline-ready • Chat saved on this device</div>
+<div class="composer"><div class="inner">
+<input id="input" placeholder="Message Carl…" autocomplete="off">
+<button class="send" id="sendBtn" type="button">Send</button>
+</div></div>
+</div>
+<script>
+const chat=document.getElementById("chat"),input=document.getElementById("input");
+let messages=JSON.parse(localStorage.getItem("carlChat")||"[]");
+function addMessage(who,text,save=true){
+ const row=document.createElement("div");row.className="msg "+(who==="Carl"?"carl":"you");
+ const b=document.createElement("div");b.className="bubble";b.textContent=text;row.appendChild(b);chat.appendChild(row);
+ chat.scrollTop=chat.scrollHeight;
+ if(save){messages.push({who,text});localStorage.setItem("carlChat",JSON.stringify(messages))}
+}
+function load(){if(!messages.length)addMessage("Carl","Hey! I’m Carl 🤖\\n\\nI’m your friendly offline study and making buddy. Ask me about revision, quizzes, ideas, or projects.\\n\\nI’m a lightweight v2 assistant, so my built-in knowledge is limited—but we can keep upgrading me!");else messages.forEach(m=>addMessage(m.who,m.text,false))}
+function quick(x){input.value=x;send()}
+function send(){const t=input.value.trim();if(!t)return;addMessage("You",t);input.value="";setTimeout(()=>addMessage("Carl",reply(t)),120)}
+function reply(raw){
+ const t=raw.toLowerCase();
+ if(/^(hi|hello|hey|yo)\\b/.test(t))return"Hey! 😄 What are we working on today?";
+ if(t.includes("thank"))return"You’re welcome! 😄";
+ if(t.includes("who are you")||t.includes("what are you"))return"I’m Carl 🤖—your friendly, calm, slightly funny offline assistant.";
+ if(t.includes("revise")||t.includes("study")||t.includes("revision"))return"Absolutely 📚\\n\\n1. Pick one small topic.\\n2. Recall what you know without notes.\\n3. Check and fix gaps.\\n4. Do practice questions.\\n5. Explain it in your own words.\\n\\nTell me the subject and topic for a more specific plan.";
+ if(t.includes("quiz")||t.includes("test me"))return"Quiz mode! 🧠\\n\\nTell me a subject and topic, like “Quiz me on photosynthesis”. I can help you structure a short practice quiz.";
+ if(t.includes("idea")||t.includes("brainstorm"))return"💡 Try this idea formula: something you like + a problem + one unusual twist.\\n\\nExample: studying + boredom + mini missions = a revision challenge game.";
+ if(t.includes("make")||t.includes("create")||t.includes("project"))return"🛠️ Let’s make it! Break it into:\\n• Goal\\n• Materials/tools\\n• Steps\\n• Improvements\\n• Final checklist";
+ if(t.includes("math"))return"➗ Tell me the exact maths topic or question. I’ll help you choose a method in this offline version.";
+ if(t.includes("help"))return"Of course 😄 Try:\\n• “Help me revise biology”\\n• “Quiz me”\\n• “Give me a project idea”\\n• “Help me make a presentation”";
+ if(t.includes("bye")||t.includes("goodbye"))return"See you later! 👋";
+ return"I’m still a small offline Carl 😅 Try asking about studying, revision, quizzes, brainstorming, or making a project. We can upgrade my brain later.";
+}
+function clearChat(){if(confirm("Clear Carl’s saved chat?")){messages=[];localStorage.removeItem("carlChat");chat.innerHTML="";load()}}
+document.getElementById("sendBtn").addEventListener("click",send);
+input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();send()}});
+if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
+load();
+</script>
+</body>
+</html>

@@ -46,11 +46,11 @@ const chat=document.getElementById("chat"),input=document.getElementById("input"
 let messages=JSON.parse(localStorage.getItem("carlChat")||"[]");
 function addMessage(who,text,save=true){
  const row=document.createElement("div");row.className="msg "+(who==="Carl"?"carl":"you");
- const b=document.createElement("div");b.className="bubble";b.textContent=text;row.appendChild(b);chat.appendChild(row);
+ const b=document.createElement("div");b.className="bubble";b.textContent=String(text).replace(/\\n|\/n/g, "\n");row.appendChild(b);chat.appendChild(row);
  chat.scrollTop=chat.scrollHeight;
  if(save){messages.push({who,text});localStorage.setItem("carlChat",JSON.stringify(messages))}
 }
-function load(){if(!messages.length)addMessage("Carl","Hey! I’m Carl 🤖\n\nI’m your friendly offline study and making buddy. Ask me about revision, quizzes, ideas, or projects.\n\nI’m a lightweight v2 assistant, so my built-in knowledge is limited—but we can keep upgrading me!");else messages.forEach(m=>addMessage(m.who,m.text,false))}
+function load(){if(!messages.length)addMessage("Carl","Hey! I’m Carl 🤖\n\nI’m your friendly offline study and making buddy. Ask me about revision, quizzes, ideas, or projects.\n\nI’m a lightweight v2 assistant, so my built-in knowledge is limited—but we can keep upgrading me!");else messages.forEach(m=>addMessage(m.who,String(m.text).replace(/\\n|\/n/g,"\n"),false))}
 function quick(x){input.value=x;send()}
 function send(){const t=input.value.trim();if(!t)return;addMessage("You",t);input.value="";setTimeout(()=>addMessage("Carl",reply(t)),120)}
 function reply(raw){

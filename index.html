@@ -50,7 +50,7 @@ function addMessage(who,text,save=true){
  chat.scrollTop=chat.scrollHeight;
  if(save){messages.push({who,text});localStorage.setItem("carlChat",JSON.stringify(messages))}
 }
-function load(){if(!messages.length)addMessage("Carl","Hey! I’m Carl 🤖\\n\\nI’m your friendly offline study and making buddy. Ask me about revision, quizzes, ideas, or projects.\\n\\nI’m a lightweight v2 assistant, so my built-in knowledge is limited—but we can keep upgrading me!");else messages.forEach(m=>addMessage(m.who,m.text,false))}
+function load(){if(!messages.length)addMessage("Carl","Hey! I’m Carl 🤖\n\nI’m your friendly offline study and making buddy. Ask me about revision, quizzes, ideas, or projects.\n\nI’m a lightweight v2 assistant, so my built-in knowledge is limited—but we can keep upgrading me!");else messages.forEach(m=>addMessage(m.who,m.text,false))}
 function quick(x){input.value=x;send()}
 function send(){const t=input.value.trim();if(!t)return;addMessage("You",t);input.value="";setTimeout(()=>addMessage("Carl",reply(t)),120)}
 function reply(raw){
@@ -58,12 +58,12 @@ function reply(raw){
  if(/^(hi|hello|hey|yo)\\b/.test(t))return"Hey! 😄 What are we working on today?";
  if(t.includes("thank"))return"You’re welcome! 😄";
  if(t.includes("who are you")||t.includes("what are you"))return"I’m Carl 🤖—your friendly, calm, slightly funny offline assistant.";
- if(t.includes("revise")||t.includes("study")||t.includes("revision"))return"Absolutely 📚\\n\\n1. Pick one small topic.\\n2. Recall what you know without notes.\\n3. Check and fix gaps.\\n4. Do practice questions.\\n5. Explain it in your own words.\\n\\nTell me the subject and topic for a more specific plan.";
- if(t.includes("quiz")||t.includes("test me"))return"Quiz mode! 🧠\\n\\nTell me a subject and topic, like “Quiz me on photosynthesis”. I can help you structure a short practice quiz.";
- if(t.includes("idea")||t.includes("brainstorm"))return"💡 Try this idea formula: something you like + a problem + one unusual twist.\\n\\nExample: studying + boredom + mini missions = a revision challenge game.";
- if(t.includes("make")||t.includes("create")||t.includes("project"))return"🛠️ Let’s make it! Break it into:\\n• Goal\\n• Materials/tools\\n• Steps\\n• Improvements\\n• Final checklist";
+ if(t.includes("revise")||t.includes("study")||t.includes("revision"))return"Absolutely 📚\n\n1. Pick one small topic.\n2. Recall what you know without notes.\n3. Check and fix gaps.\n4. Do practice questions.\n5. Explain it in your own words.\n\nTell me the subject and topic for a more specific plan.";
+ if(t.includes("quiz")||t.includes("test me"))return"Quiz mode! 🧠\n\nTell me a subject and topic, like “Quiz me on photosynthesis”. I can help you structure a short practice quiz.";
+ if(t.includes("idea")||t.includes("brainstorm"))return"💡 Try this idea formula: something you like + a problem + one unusual twist.\n\nExample: studying + boredom + mini missions = a revision challenge game.";
+ if(t.includes("make")||t.includes("create")||t.includes("project"))return"🛠️ Let’s make it! Break it into:\n• Goal\n• Materials/tools\n• Steps\n• Improvements\n• Final checklist";
  if(t.includes("math"))return"➗ Tell me the exact maths topic or question. I’ll help you choose a method in this offline version.";
- if(t.includes("help"))return"Of course 😄 Try:\\n• “Help me revise biology”\\n• “Quiz me”\\n• “Give me a project idea”\\n• “Help me make a presentation”";
+ if(t.includes("help"))return"Of course 😄 Try:\n• “Help me revise biology”\n• “Quiz me”\n• “Give me a project idea”\n• “Help me make a presentation”";
  if(t.includes("bye")||t.includes("goodbye"))return"See you later! 👋";
  return"I’m still a small offline Carl 😅 Try asking about studying, revision, quizzes, brainstorming, or making a project. We can upgrade my brain later.";
 }
